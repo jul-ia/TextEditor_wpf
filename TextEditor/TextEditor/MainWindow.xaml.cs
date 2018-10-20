@@ -38,7 +38,7 @@ namespace TextEditor
             available.Add(ApplicationCommands.Redo);
 
             current = new List<RoutedCommand>();
-            //current.Add(ApplicationCommands.New);
+            current.Add(ApplicationCommands.New);
 
             //toolbar
         }
@@ -83,18 +83,12 @@ namespace TextEditor
             changed = false;
         }
 
-        private void CommonCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void CommonCommandBinding_CanExecute(object target, CanExecuteRoutedEventArgs e)
         {
-            
-            //string s ="\n" + e.Source.ToString();
-            //if (txtBox2 != null)
-            //{
-            //    txtBox2.Text = "w+"+s+"\n";
-            //    txtBox2.Text += "sender -" + sender.ToString();
-            //}
-
-           
             e.CanExecute = true;
+
+            if (current != null && current.IndexOf((RoutedCommand)e.Command) != -1)
+                e.CanExecute = false;
         }
 
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
