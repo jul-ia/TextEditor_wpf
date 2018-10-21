@@ -19,20 +19,56 @@ namespace TextEditor
     /// </summary>
     public partial class FxChange : Window
     {
-        List<RoutedCommand> commandsL;
-        List<RoutedCommand> commandsR;
+        List<RoutedCommand> all;
 
-
-        public FxChange(List<RoutedCommand> l, List<RoutedCommand> r)
+        public FxChange(List<RoutedCommand> c)
         {
             InitializeComponent();
-            commandsL = l;
-            commandsR = r;
 
-            if (commandsL.Count == 0)
+            all = new List<RoutedCommand>();
+            all.Add(ApplicationCommands.Open);
+            all.Add(ApplicationCommands.Save);
+            all.Add(ApplicationCommands.SaveAs);
+            all.Add(ApplicationCommands.Copy);
+            all.Add(ApplicationCommands.Paste);
+            all.Add(ApplicationCommands.Undo);
+            all.Add(ApplicationCommands.Redo);
+
+            if (c.Count == 0)
                 b2.IsEnabled = false;
-            if (commandsR.Count == 0)
+            if (c.Count == all.Count)
+                b1.IsEnabled = false;
+
+            lb1.ItemsSource = all;
+
+            foreach(RoutedCommand item in c)
+            {
+                lb2.Items.Add(item);
+            }
+        }
+
+        private void b1_Click(object sender, RoutedEventArgs e)
+        {
+            if (lb2.Items.Count == 0)
+                b2.IsEnabled = true;
+            lb2.Items.Add(lb1.SelectedValue);
+        }
+
+        private void b2_Click(object sender, RoutedEventArgs e)
+        {
+            if (lb2.Items.Count == lb1.Items.Count)
+                b1.IsEnabled = false;
+
+            lb2.Items.Remove(lb2.SelectedItem);
+        }
+
+        private void lb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lb2.Items.IndexOf(lb1.SelectedValue) < 0)
+                b1.IsEnabled = true;
+            else
                 b1.IsEnabled = false;
         }
+
     }
 }

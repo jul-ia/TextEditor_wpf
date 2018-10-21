@@ -22,8 +22,7 @@ namespace TextEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<RoutedCommand> available;
-        List<RoutedCommand> current;
+        public List<RoutedCommand> current;
         string filename;
         bool changed = false;
 
@@ -31,46 +30,35 @@ namespace TextEditor
         {
             InitializeComponent();
 
-            available = new List<RoutedCommand>();
-            available.Add(ApplicationCommands.Copy);
-            available.Add(ApplicationCommands.Paste);
-            available.Add(ApplicationCommands.Undo);
-            available.Add(ApplicationCommands.Redo);
-
             current = new List<RoutedCommand>();
-            current.Add(ApplicationCommands.New);
+            //current.Add(ApplicationCommands.Open);
 
-            //toolbar
         }
 
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var sfd = new SaveFileDialog() { Filter = "Text Files (*.txt)|*.txt|C# file (*.cs)|*.cs|All files (*.*)|*.*" };
-            if (sfd.ShowDialog() == true)
-            {
-                filename = sfd.FileName;
-            }
+            if (changed)
+                SaveCheck();
+
+            txtBox.Text = "";
         }
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             if (changed)
             {
-                MessageBoxResult result = MessageBox.Show("Save changes?", "Confirm", MessageBoxButton.YesNo);
-                if (result == MessageBoxResult.Yes)
-                    File.WriteAllText(filename, txtBox.Text);
-                changed = false;
+                SaveCheck();
             }
             OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             if (dlg.ShowDialog() == true)
             {
                 filename = dlg.FileName;
                 txtBox.Text = File.ReadAllText(dlg.FileName);
+                changed = false;
             }
         }
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            File.WriteAllText(filename, txtBox.Text);
-            changed = false;
+            FileSave();
         }
         private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e)
         {
@@ -79,22 +67,26 @@ namespace TextEditor
             {
                 File.WriteAllText(sfd.FileName, txtBox.Text);
                 filename = sfd.FileName;
+                changed = false;
             }
-            changed = false;
         }
 
         private void CommonCommandBinding_CanExecute(object target, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
-
-            if (current != null && current.IndexOf((RoutedCommand)e.Command) != -1)
-                e.CanExecute = false;
         }
 
-        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void CurrentCommands_CanExecute(object target, CanExecuteRoutedEventArgs e)
         {
-            //todo
+            if (current != null && current.IndexOf((RoutedCommand)e.Command) != -1)
+            {
+                e.CanExecute = true;
+            }
+            else
+                e.CanExecute = false;
+
         }
+
         private void Exit_Execute(object sender, ExecutedRoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -102,27 +94,14 @@ namespace TextEditor
 
         private void Fx_Click(object sender, RoutedEventArgs e)
         {
-            FxChange fx = new FxChange(available, current);
+            FxChange fx = new FxChange(current);
+            fx.Owner = this;
             fx.ShowDialog();
+            current.Clear();
+            foreach (RoutedCommand r in fx.lb2.Items)
+                current.Add(r);
+            
         }
-
-        //private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        //{
-        //    MessageBoxResult result = MessageBox.Show("Are you shure?", "Confirm", MessageBoxButton.YesNo);
-        //    if (result == MessageBoxResult.Yes)
-        //    {
-        //        if (changed)
-        //        {
-        //            result = MessageBox.Show("Save before closing?", "Confirm", MessageBoxButton.YesNo);
-        //            if(result == MessageBoxResult.Yes)
-        //                File.WriteAllText(filename, txtBox.Text);
-        //        }                
-        //    }
-        //    else
-        //    {
-        //        e.Cancel = true;
-        //    }
-        //}
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -131,16 +110,7 @@ namespace TextEditor
                 case MessageBoxResult.Yes:
                     if (changed)
                     {
-                        switch (MessageBox.Show("Save before closing?", "Confirm", MessageBoxButton.YesNo))
-                        {
-                            case MessageBoxResult.Yes:
-                                File.WriteAllText(filename, txtBox.Text);
-                                break;
-                            case MessageBoxResult.No:
-                                break;
-                            default:
-                                break;
-                        }
+                        SaveCheck();
                     }
                     break;
                 case MessageBoxResult.No:
@@ -151,10 +121,42 @@ namespace TextEditor
             }
         }
 
+        private void SaveCheck()
+        {
+            switch (MessageBox.Show("Save before closing?", "Confirm", MessageBoxButton.YesNo))
+            {
+                case MessageBoxResult.Yes:
+                    FileSave();
+                    break;
+                case MessageBoxResult.No:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void FileSave()
+        {
+            if (filename == null)
+            {
+                var sfd = new SaveFileDialog() { Filter = "Text Files (*.txt)|*.txt|C# file (*.cs)|*.cs|All files (*.*)|*.*" };
+                if (sfd.ShowDialog() == true)
+                {
+                    File.WriteAllText(sfd.FileName, txtBox.Text);
+                    filename = sfd.FileName;
+                    changed = false;
+                }
+            }
+            else
+            {
+                File.WriteAllText(filename, txtBox.Text);
+                changed = false;
+            }
+        }
+
         private void txtBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             changed = true;
-            
         }
 
         private void Info_Click(object sender, RoutedEventArgs e)
