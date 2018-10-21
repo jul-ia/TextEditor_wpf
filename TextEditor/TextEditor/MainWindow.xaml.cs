@@ -25,7 +25,7 @@ namespace TextEditor
         public List<RoutedCommand> current;
         string filename;
         bool changed = false;
-
+ 
         public MainWindow()
         {
             InitializeComponent();
@@ -105,7 +105,7 @@ namespace TextEditor
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            switch (MessageBox.Show("Are you shure?", "Confirm", MessageBoxButton.YesNo))
+            switch (MessageBox.Show("Are you sure?", "Confirm", MessageBoxButton.YesNo))
             {
                 case MessageBoxResult.Yes:
                     if (changed)
@@ -163,5 +163,11 @@ namespace TextEditor
         {
             MessageBox.Show("HELP!!!");
         }
+
+        private void toolbarEdit()
+        {
+           
+        }
+
     }
 }

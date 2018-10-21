@@ -26,7 +26,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" Height="25" FontSize="14" Grid.ColumnSpan="2">
+        <Menu Grid.Row="0" Height="25" FontSize="14">
             <MenuItem Header="File">
                 <MenuItem Header="New" Command="New"></MenuItem>
                 <MenuItem Header="Open" Command="Open"></MenuItem>
@@ -36,27 +36,27 @@
                 <MenuItem Header="Exit" Command="Close"></MenuItem>
             </MenuItem>
             <MenuItem Header="Edit">
-                <MenuItem Header="Copy" CommandTarget="{Binding ElementName=txtBox}" Command="Copy"></MenuItem>
-                <MenuItem Header="Paste" CommandTarget="{Binding ElementName=txtBox}" Command="Paste"></MenuItem>
+                <MenuItem Header="Copy" Command="Copy"></MenuItem>
+                <MenuItem Header="Paste" Command="Paste"></MenuItem>
                 <Separator />
-                <MenuItem Header="Undo" CommandTarget="{Binding ElementName=txtBox}" Command="Undo"></MenuItem>
-                <MenuItem Header="Redo" CommandTarget="{Binding ElementName=txtBox}" Command="Redo"></MenuItem>
+                <MenuItem Header="Undo" Command="Undo"></MenuItem>
+                <MenuItem Header="Redo" Command="Redo"></MenuItem>
             </MenuItem>
             <MenuItem Header="Fx" Click="Fx_Click"></MenuItem>
             <MenuItem Header="About"></MenuItem>
         </Menu>
 
-        <ToolBarTray  Grid.Row="1" Grid.ColumnSpan="2">
+        <ToolBarTray  Grid.Row="1">
             <ToolBar Name="toolbar" Height ="30">
                 <Button Command="ApplicationCommands.New">New</Button>
                 <Separator />
-                <Button Command="Copy">Copy</Button>
+                <Button Command="ApplicationCommands.Copy">Copy</Button>
                 <Separator />
-                <Button Command="Paste">Paste</Button>
+                <Button Command="ApplicationCommands.Paste">Paste</Button>
                 <Separator />
-                <Button Command="Undo">Undo</Button>
+                <Button Command="ApplicationCommands.Undo">Undo</Button>
                 <Separator />
-                <Button Command="Redo">Redo</Button>
+                <Button Command="ApplicationCommands.Redo">Redo</Button>
                 <Separator />
                 <Button Click="Info_Click">
                     <Image Source="Images/Info.png"/>
