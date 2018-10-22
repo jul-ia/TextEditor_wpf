@@ -19,31 +19,22 @@ namespace TextEditor
     /// </summary>
     public partial class FxChange : Window
     {
-        List<RoutedCommand> all;
-
-        public FxChange(List<RoutedCommand> c)
+        public FxChange(List<RoutedCommand> all, List<RoutedCommand> cur)
         {
             InitializeComponent();
-
-            all = new List<RoutedCommand>();
-            all.Add(ApplicationCommands.Open);
-            all.Add(ApplicationCommands.Save);
-            all.Add(ApplicationCommands.SaveAs);
-            all.Add(ApplicationCommands.Copy);
-            all.Add(ApplicationCommands.Paste);
-            all.Add(ApplicationCommands.Undo);
-            all.Add(ApplicationCommands.Redo);
-
-            if (c.Count == 0)
+            if (cur.Count == 0)
                 b2.IsEnabled = false;
-            if (c.Count == all.Count)
+            if (cur.Count == all.Count || all.Count == 0)
                 b1.IsEnabled = false;
 
-            lb1.ItemsSource = all;
-
-            foreach(RoutedCommand item in c)
+            foreach(RoutedCommand item in cur)
             {
                 lb2.Items.Add(item);
+            }
+
+            foreach (RoutedCommand item in all)
+            {
+                lb1.Items.Add(item);
             }
         }
 
@@ -52,22 +43,16 @@ namespace TextEditor
             if (lb2.Items.Count == 0)
                 b2.IsEnabled = true;
             lb2.Items.Add(lb1.SelectedValue);
+            lb1.Items.Remove(lb1.SelectedValue);
+            
         }
 
         private void b2_Click(object sender, RoutedEventArgs e)
         {
             if (lb2.Items.Count == lb1.Items.Count)
                 b1.IsEnabled = false;
-
+            lb1.Items.Add(lb2.SelectedItem);
             lb2.Items.Remove(lb2.SelectedItem);
-        }
-
-        private void lb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (lb2.Items.IndexOf(lb1.SelectedValue) < 0)
-                b1.IsEnabled = true;
-            else
-                b1.IsEnabled = false;
         }
 
     }

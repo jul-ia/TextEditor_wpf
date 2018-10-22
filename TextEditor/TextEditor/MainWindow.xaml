@@ -50,13 +50,13 @@
             <ToolBar Name="toolbar" Height ="30">
                 <Button Command="ApplicationCommands.New">New</Button>
                 <Separator />
-                <Button Command="ApplicationCommands.Copy">Copy</Button>
+                <Button Name="Copy" Command="ApplicationCommands.Copy">Copy</Button>
                 <Separator />
-                <Button Command="ApplicationCommands.Paste">Paste</Button>
+                <Button Name="Paste" Command="ApplicationCommands.Paste">Paste</Button>
                 <Separator />
-                <Button Command="ApplicationCommands.Undo">Undo</Button>
+                <Button Name="Undo" Command="ApplicationCommands.Undo">Undo</Button>
                 <Separator />
-                <Button Command="ApplicationCommands.Redo">Redo</Button>
+                <Button Name="Redo" Command="ApplicationCommands.Redo">Redo</Button>
                 <Separator />
                 <Button Click="Info_Click">
                     <Image Source="Images/Info.png"/>

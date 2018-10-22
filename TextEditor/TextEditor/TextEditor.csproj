@@ -74,6 +74,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FileManager.cs" />
     <Compile Include="FxChange.xaml.cs">
       <DependentUpon>FxChange.xaml</DependentUpon>
     </Compile>

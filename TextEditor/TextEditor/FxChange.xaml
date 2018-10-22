@@ -21,7 +21,7 @@
         <Label Grid.Column="0" Grid.Row="0" Content="All commands" FontSize="13" HorizontalAlignment="Center"/>
         <Label Grid.Column="2" Grid.Row="0" Content="Available commands" FontSize="13" HorizontalAlignment="Center"/>
 
-        <ListBox Name="lb1" Grid.Column="0" Grid.Row="1" Margin="10" FontSize="15" SelectionChanged="lb1_SelectionChanged" >
+        <ListBox Name="lb1" Grid.Column="0" Grid.Row="1" Margin="10" FontSize="15" >
         </ListBox>
         <ListBox Name="lb2" Grid.Column="2" Grid.Row="1" Margin="10" FontSize="15" ></ListBox>
 

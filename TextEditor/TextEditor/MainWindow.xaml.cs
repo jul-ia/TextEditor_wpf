@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,10 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace TextEditor
 {
@@ -22,17 +18,24 @@ namespace TextEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<RoutedCommand> current;
-        string filename;
+        List<RoutedCommand> all;
+        List<RoutedCommand> current;
         bool changed = false;
  
         public MainWindow()
         {
             InitializeComponent();
 
-            current = new List<RoutedCommand>();
-            //current.Add(ApplicationCommands.Open);
+            all = new List<RoutedCommand>();
+            all.Add(ApplicationCommands.Open);
+            all.Add(ApplicationCommands.Save);
+            all.Add(ApplicationCommands.SaveAs);
 
+            current = new List<RoutedCommand>();
+            current.Add(ApplicationCommands.Copy);
+            current.Add(ApplicationCommands.Paste);
+            current.Add(ApplicationCommands.Undo);
+            current.Add(ApplicationCommands.Redo);
         }
 
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -40,6 +43,7 @@ namespace TextEditor
             if (changed)
                 SaveCheck();
 
+            FileManager.Filename = string.Empty;
             txtBox.Text = "";
         }
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -48,27 +52,15 @@ namespace TextEditor
             {
                 SaveCheck();
             }
-            OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            if (dlg.ShowDialog() == true)
-            {
-                filename = dlg.FileName;
-                txtBox.Text = File.ReadAllText(dlg.FileName);
-                changed = false;
-            }
+            FileManager.OpenFile(txtBox, ref changed);
         }
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            FileSave();
+            FileManager.FileSave(txtBox, ref changed);
         }
         private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var sfd = new SaveFileDialog() { Filter = "Text Files (*.txt)|*.txt|C# file (*.cs)|*.cs|All files (*.*)|*.*" };
-            if (sfd.ShowDialog() == true)
-            {
-                File.WriteAllText(sfd.FileName, txtBox.Text);
-                filename = sfd.FileName;
-                changed = false;
-            }
+            FileManager.FileSaveAs(txtBox, ref changed);
         }
 
         private void CommonCommandBinding_CanExecute(object target, CanExecuteRoutedEventArgs e)
@@ -79,9 +71,7 @@ namespace TextEditor
         private void CurrentCommands_CanExecute(object target, CanExecuteRoutedEventArgs e)
         {
             if (current != null && current.IndexOf((RoutedCommand)e.Command) != -1)
-            {
                 e.CanExecute = true;
-            }
             else
                 e.CanExecute = false;
 
@@ -94,13 +84,19 @@ namespace TextEditor
 
         private void Fx_Click(object sender, RoutedEventArgs e)
         {
-            FxChange fx = new FxChange(current);
+            FxChange fx = new FxChange(all,current);
             fx.Owner = this;
             fx.ShowDialog();
+
             current.Clear();
             foreach (RoutedCommand r in fx.lb2.Items)
                 current.Add(r);
-            
+
+            all.Clear();
+            foreach (RoutedCommand r in fx.lb1.Items)
+                all.Add(r);
+
+            toolbarEdit();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -109,9 +105,7 @@ namespace TextEditor
             {
                 case MessageBoxResult.Yes:
                     if (changed)
-                    {
                         SaveCheck();
-                    }
                     break;
                 case MessageBoxResult.No:
                     e.Cancel = true;
@@ -126,31 +120,12 @@ namespace TextEditor
             switch (MessageBox.Show("Save before closing?", "Confirm", MessageBoxButton.YesNo))
             {
                 case MessageBoxResult.Yes:
-                    FileSave();
+                    FileManager.FileSave(txtBox, ref changed);
                     break;
                 case MessageBoxResult.No:
                     break;
                 default:
                     break;
-            }
-        }
-
-        private void FileSave()
-        {
-            if (filename == null)
-            {
-                var sfd = new SaveFileDialog() { Filter = "Text Files (*.txt)|*.txt|C# file (*.cs)|*.cs|All files (*.*)|*.*" };
-                if (sfd.ShowDialog() == true)
-                {
-                    File.WriteAllText(sfd.FileName, txtBox.Text);
-                    filename = sfd.FileName;
-                    changed = false;
-                }
-            }
-            else
-            {
-                File.WriteAllText(filename, txtBox.Text);
-                changed = false;
             }
         }
 
@@ -161,12 +136,18 @@ namespace TextEditor
 
         private void Info_Click(object sender, RoutedEventArgs e)
         {
+            //todo
             MessageBox.Show("HELP!!!");
         }
 
         private void toolbarEdit()
         {
-           
+            for (int i = 1; i < toolbar.Items.Count; i++)
+            {
+                if (toolbar.Items[i] is Button && ((Button)toolbar.Items[i]).Command != null)
+                    if (!current.Contains(((Button)toolbar.Items[i]).Command))
+                        ((Button)toolbar.Items[i]).Visibility = Visibility.Hidden;
+            }       
         }
 
     }

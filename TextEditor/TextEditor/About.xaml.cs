@@ -19,6 +19,8 @@ namespace TextEditor
     /// </summary>
     public partial class About : Window
     {
+        //todo
+
         public About()
         {
             InitializeComponent();
