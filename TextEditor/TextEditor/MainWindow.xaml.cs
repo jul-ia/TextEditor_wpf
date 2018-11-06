@@ -97,6 +97,7 @@ namespace TextEditor
                 all.Add(r);
 
             toolbarEdit();
+            menuEdit();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -136,8 +137,7 @@ namespace TextEditor
 
         private void Info_Click(object sender, RoutedEventArgs e)
         {
-            //todo
-            MessageBox.Show("HELP!!!");
+            MessageBox.Show("Простий текстовий редактор для створення та редагування файлів.");
         }
 
         private void toolbarEdit()
@@ -147,8 +147,30 @@ namespace TextEditor
                 if (toolbar.Items[i] is Button && ((Button)toolbar.Items[i]).Command != null)
                     if (!current.Contains(((Button)toolbar.Items[i]).Command))
                         ((Button)toolbar.Items[i]).Visibility = Visibility.Hidden;
-            }       
+                    else
+                        ((Button)toolbar.Items[i]).Visibility = Visibility.Visible;
+
+            }
         }
 
+        private void menuEdit()
+        {
+            for (int i = 1; i < editmenu.Items.Count; i++)
+            {
+                if (editmenu.Items[i] is MenuItem)
+                {
+                    if (!current.Contains(((MenuItem)editmenu.Items[i]).Command))
+                        ((MenuItem)editmenu.Items[i]).Visibility = Visibility.Hidden;
+                    else
+                        ((MenuItem)editmenu.Items[i]).Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            About a = new About();
+            a.Show();
+        }
     }
 }

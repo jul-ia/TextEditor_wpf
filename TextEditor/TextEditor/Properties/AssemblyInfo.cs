@@ -8,7 +8,7 @@ using System.Windows;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
 [assembly: AssemblyTitle("TextEditor")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Простий текстовий редактор для створення та редагування файлів.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("TextEditor")]

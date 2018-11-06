@@ -35,7 +35,7 @@
                 <Separator />
                 <MenuItem Header="Exit" Command="Close"></MenuItem>
             </MenuItem>
-            <MenuItem Header="Edit">
+            <MenuItem Name="editmenu" Header="Edit">
                 <MenuItem Header="Copy" Command="Copy"></MenuItem>
                 <MenuItem Header="Paste" Command="Paste"></MenuItem>
                 <Separator />
@@ -43,7 +43,7 @@
                 <MenuItem Header="Redo" Command="Redo"></MenuItem>
             </MenuItem>
             <MenuItem Header="Fx" Click="Fx_Click"></MenuItem>
-            <MenuItem Header="About"></MenuItem>
+            <MenuItem Header="About" Click="About_Click"></MenuItem>
         </Menu>
 
         <ToolBarTray  Grid.Row="1">

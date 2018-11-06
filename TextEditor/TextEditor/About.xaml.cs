@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Reflection;
 
 namespace TextEditor
 {
@@ -24,6 +25,13 @@ namespace TextEditor
         public About()
         {
             InitializeComponent();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            l1.Content = assembly.GetName().Name;
+            object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+            txt.Text = String.Format("Опис: {0}\nВерсія: {1}\nCopyright: {2}\n", 
+                attributes[0], 
+                assembly.GetName().Version.ToString(), 
+                assembly.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright);
         }
     }
 }
