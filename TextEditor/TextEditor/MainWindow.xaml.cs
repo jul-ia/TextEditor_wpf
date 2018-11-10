@@ -25,7 +25,7 @@ namespace TextEditor
         public MainWindow()
         {
             InitializeComponent();
-
+            
             all = new List<RoutedCommand>();
             all.Add(ApplicationCommands.Open);
             all.Add(ApplicationCommands.Save);

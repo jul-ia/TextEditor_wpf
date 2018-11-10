@@ -29,7 +29,7 @@ namespace TextEditor
             l1.Content = assembly.GetName().Name;
             object[] attributes = assembly.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
             txt.Text = String.Format("Опис: {0}\nВерсія: {1}\nCopyright: {2}\n", 
-                attributes[0], 
+                ((AssemblyDescriptionAttribute)attributes[0]).Description, 
                 assembly.GetName().Version.ToString(), 
                 assembly.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright);
         }

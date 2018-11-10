@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TextEditor"
         mc:Ignorable="d"
-        Title="TextEditor" Height="350" Width="525" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="TextEditor" Height="350" Width="525" Closing="Window_Closing" 
+        Icon="./Images/icon.png" WindowStartupLocation="CenterScreen">
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="CommonCommandBinding_CanExecute" Executed="New_Executed" />
         <CommandBinding Command="Open" CanExecute="CurrentCommands_CanExecute" Executed ="Open_Executed"/>
